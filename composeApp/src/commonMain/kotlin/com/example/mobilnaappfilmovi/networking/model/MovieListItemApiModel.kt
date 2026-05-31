@@ -1,0 +1,14 @@
+package com.example.mobilnaappfilmovi.networking.model
+
+import kotlinx.serialization.Serializable
+
+@Serializable
+data class MovieListItemApiModel(
+    val imdbId: String,
+    val title:String,
+    val year:Int?=null,
+    val imdbRating: Float?=null,
+    val imdbVotes:Int?=null,
+    val posterPath: String?=null,
+    val genres: List<GenreApiModel> = emptyList()
+)
