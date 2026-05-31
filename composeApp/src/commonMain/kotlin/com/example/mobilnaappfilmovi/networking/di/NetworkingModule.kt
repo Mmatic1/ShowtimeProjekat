@@ -4,6 +4,8 @@ import com.example.mobilnaappfilmovi.core.auth.model.AuthState
 import com.example.mobilnaappfilmovi.networking.AuthApi
 import com.example.mobilnaappfilmovi.networking.HttpClientFactory
 import com.example.mobilnaappfilmovi.networking.MoviesApi
+import com.example.mobilnaappfilmovi.networking.createAuthApi
+import com.example.mobilnaappfilmovi.networking.createMoviesApi
 import de.jensklingenberg.ktorfit.Ktorfit
 import io.github.aakira.napier.Napier
 import io.ktor.client.HttpClient
@@ -23,8 +25,7 @@ import io.ktor.serialization.kotlinx.json.json
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.json.Json
 import org.koin.dsl.module
-import projekat.networking.createMoviesApi
-import projekat.networking.createAuthApi
+
 
 val networkingModule = module {
     single<HttpClient>(Qualifiers.Unauthenticated){

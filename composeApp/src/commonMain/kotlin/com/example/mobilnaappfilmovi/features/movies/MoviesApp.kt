@@ -5,7 +5,7 @@ import androidx.compose.runtime.Composable
 @Composable
 fun MoviesApp()
 {
-    _root_ide_package_.projekat.features.movies.MoviesNavigation(
+    MoviesNavigation(
         startDestination = "movies"
     )
 }

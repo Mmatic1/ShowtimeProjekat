@@ -2,10 +2,11 @@ package com.example.mobilnaappfilmovi
 
 import android.app.Application
 import com.example.mobilnaappfilmovi.core.db.di.androidDatabaseModule
+import com.example.mobilnaappfilmovi.di.initKoin
+import com.example.mobilnaappfilmovi.features.movies.di.moviesModule
+import com.example.mobilnaappfilmovi.networking.di.networkingModule
 import org.koin.android.ext.koin.androidContext
-import projekat.di.initKoin
-import projekat.features.movies.di.moviesModule
-import projekat.core.networking.di.networkingModule
+
 
 class App: Application()
 {
@@ -17,7 +18,7 @@ class App: Application()
             androidContext(this@App)
             modules(
                 androidDatabaseModule(this@App),
-                projekat.features.movies.di.moviesModule,
+               moviesModule,
                 networkingModule
             )
         }

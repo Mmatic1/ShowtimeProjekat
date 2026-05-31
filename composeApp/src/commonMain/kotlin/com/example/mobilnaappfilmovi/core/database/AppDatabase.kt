@@ -6,9 +6,12 @@ import androidx.room.RoomDatabase
 import androidx.room.RoomDatabaseConstructor
 import androidx.sqlite.driver.bundled.BundledSQLiteDriver
 import com.example.mobilnaappfilmovi.features.movies.db.GenreEntity
+import com.example.mobilnaappfilmovi.features.movies.db.MovieDetailsEntity
 import com.example.mobilnaappfilmovi.features.movies.db.MovieEntity
 import com.example.mobilnaappfilmovi.features.movies.db.MovieGenreCrossRef
 import com.example.mobilnaappfilmovi.features.movies.db.MoviesDao
+import com.example.mobilnaappfilmovi.features.profile.db.UserDao
+import com.example.mobilnaappfilmovi.features.profile.db.UserEntity
 import kotlinx.coroutines.Dispatchers
 
 
@@ -16,7 +19,9 @@ import kotlinx.coroutines.Dispatchers
     entities = [
         MovieEntity::class,
         GenreEntity::class,
-        MovieGenreCrossRef::class
+        MovieGenreCrossRef::class,
+        MovieDetailsEntity::class,
+        UserEntity::class
     ],
     version = 1,
     exportSchema = true
@@ -25,6 +30,7 @@ import kotlinx.coroutines.Dispatchers
 abstract class AppDatabase : RoomDatabase() {
 
     abstract fun moviesDao(): MoviesDao
+    abstract fun userDao(): UserDao
 }
 
 @Suppress(

@@ -10,8 +10,8 @@ data class AuthData(
 ){
     companion object {
         fun empty(): AuthData = AuthData(
-            accessToken = "",
-            refreshToken = "",
+            accessToken = null,
+            refreshToken = null,
         )
     }
 }
