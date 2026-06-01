@@ -1,4 +1,4 @@
-package com.example.mobilnaappfilmovi.features.movies.filter
+/*package com.example.mobilnaappfilmovi.features.movies.filter
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -19,7 +19,7 @@ import projekat.features.movies.filter.components.GenreSection
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FiltersScreen(
-    viewModel: projekat.features.movies.filter.FiltersViewModel,
+    viewModel: FiltersViewModel,
     onNavigateBack: () -> Unit,
     onApplyFilters: (projekat.features.movies.domain.Filters) -> Unit
 ) {
@@ -199,4 +199,4 @@ fun FilterActionButtons(onClear: () -> Unit, onApply: () -> Unit) {
             Text("Apply Filters", color = Color.White)
         }
     }
-}
+}*/

@@ -4,10 +4,13 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.lifecycle.SavedStateHandle
+import com.example.mobilnaappfilmovi.features.ShowtimeNavigation
 import com.example.mobilnaappfilmovi.features.splash.BootState
+import com.example.mobilnaappfilmovi.features.splash.SplashScreen
 import com.example.mobilnaappfilmovi.features.splash.SplashViewModel
 import org.koin.compose.viewmodel.koinViewModel
-import java.awt.SplashScreen
+
 
 @Composable
 fun ShowtimeApp(){

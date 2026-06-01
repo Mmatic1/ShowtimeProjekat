@@ -18,4 +18,11 @@ interface MovieRepository{
     suspend fun refreshMovie(id: String)
 
     suspend fun refreshGenres()
+
+    suspend fun updateFavorite(movieId: String, value: Boolean)
+    suspend fun updateWatchlist(movieId: String, value: Boolean)
+    suspend fun addFavorite(movieId: String)
+    suspend fun removeFavorite(movieId: String)
+    suspend fun addToWatchlist(movieId: String)
+    suspend fun removeFromWatchlist(movieId: String)
 }

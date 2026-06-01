@@ -24,5 +24,7 @@ data class MovieDetails(
     val genres: List<Genre>,
     val images: List<String>,
     val cast:List<Actor> = emptyList(),
-    val trailerUrl: String?=null
+    val trailerUrl: String?=null,
+    val favorite: Boolean,
+    val watchlist: Boolean,
 )

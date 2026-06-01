@@ -17,4 +17,23 @@ interface UserDao {
     )
     @Query("DELETE FROM user")
     suspend fun clear()
+
+    @Query("SELECT * FROM favorites")
+    fun observeFavorites():Flow<List<FavoriteEntity>>
+
+    @Query("SELECT * FROM watchlist")
+    fun observeWatchlist(): Flow<List<WatchlistEntity>>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun addFavorite(entity: FavoriteEntity)
+
+    @Query("DELETE FROM favorites WHERE movieId = :id")
+    suspend fun removeFavorite(id: String)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun addToWatchlist(entity: WatchlistEntity)
+
+    @Query("DELETE FROM watchlist WHERE movieId = :id")
+    suspend fun removeFromWatchlist(id: String)
+
 }

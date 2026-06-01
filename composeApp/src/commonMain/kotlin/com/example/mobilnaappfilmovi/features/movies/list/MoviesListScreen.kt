@@ -40,6 +40,7 @@ fun MoviesListScreen(
     viewModel: MoviesListViewModel,
     onNavigateToDetails: (String) -> Unit,
     onNavigateToFilters: () -> Unit,
+
 ) {
 
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -85,6 +86,8 @@ fun MoviesListScreen(
                 }
 
                 is MoviesListContract.SideEffect.ShowError -> Unit
+
+
             }
         }
     }
@@ -117,7 +120,9 @@ fun MoviesListScreen(
                 )
             ) {
 
-                Button(
+
+
+               Button(
                     onClick = {
                         viewModel.onEvent(
                             MoviesListContract.UiEvent.SortClicked

@@ -14,6 +14,10 @@ interface MovieDetailsContract{
     sealed class UiEvent{
         data object LoadDetails: UiEvent()
         data object BackClicked: UiEvent()
+
+        data object FavoriteClicked : UiEvent()
+
+        data object WatchlistClicked : UiEvent()
     }
 
     sealed class SideEffect{

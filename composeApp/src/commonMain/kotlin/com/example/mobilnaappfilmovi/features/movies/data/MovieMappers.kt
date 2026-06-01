@@ -8,6 +8,7 @@ import com.example.mobilnaappfilmovi.features.movies.db.MovieWithGenres
 import com.example.mobilnaappfilmovi.features.movies.domain.Genre
 import com.example.mobilnaappfilmovi.features.movies.domain.Movie
 import com.example.mobilnaappfilmovi.features.movies.domain.MovieDetails
+import com.example.mobilnaappfilmovi.features.movies.domain.SortType
 import com.example.mobilnaappfilmovi.networking.model.GenreApiModel
 import com.example.mobilnaappfilmovi.networking.model.MovieDetailsApiModel
 import com.example.mobilnaappfilmovi.networking.model.MovieListItemApiModel
@@ -126,4 +127,13 @@ fun MovieDetailsWithGenres.toDomain(): MovieDetails =
         images = emptyList(),
         cast = emptyList(),
         trailerUrl = null,
+        favorite=movie.favorite,
+        watchlist = movie.watchlist
     )
+fun SortType.toApiValue(): String =
+    when (this) {
+        SortType.RATING -> "rating"
+        SortType.YEAR -> "year"
+        SortType.TITLE -> "title"
+        SortType.POPULARITY -> "popularity"
+    }

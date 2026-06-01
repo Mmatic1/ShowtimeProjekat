@@ -6,7 +6,6 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
-import com.example.mobilnaappfilmovi.features.movies.MoviesApp
 import com.example.mobilnaappfilmovi.features.movies.ShowtimeApp
 import org.koin.android.ext.koin.androidContext
 
@@ -16,7 +15,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         super.onCreate(savedInstanceState)
         setContent {
-            ShowtimeApp()
+            AppM()
         }
     }
 }
@@ -24,5 +23,5 @@ class MainActivity : ComponentActivity() {
 @Preview
 @Composable
 fun AppAndroidPreview() {
-    ShowtimeApp()
+    AppM()
 }

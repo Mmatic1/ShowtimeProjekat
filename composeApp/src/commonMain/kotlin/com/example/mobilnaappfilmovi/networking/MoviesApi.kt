@@ -48,4 +48,6 @@ interface MoviesApi {
 
     @GET("genres")
     suspend fun getGenres(): List<GenreApiModel>
+
+
 }

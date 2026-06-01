@@ -3,8 +3,8 @@ package com.example.mobilnaappfilmovi.features.movies.details
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.mobilnaappfilmovi.features.movieIdOrThrow
 import com.example.mobilnaappfilmovi.features.movies.domain.MovieRepository
-import com.example.mobilnaappfilmovi.features.movies.movieIdOrThrow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -57,6 +57,45 @@ class MovieDetailsViewModel(
                     )
                 }
             }
+
+            is MovieDetailsContract.UiEvent.FavoriteClicked -> {
+                val current=state.value.movieDetails?:return
+                viewModelScope.launch {
+                    val newValue=!current.favorite
+                    movieRepository.updateFavorite(movieId,newValue)
+                    runCatching {
+                        if(newValue)
+                        {
+                            movieRepository.addFavorite(movieId)
+                        }else {
+                            movieRepository.removeFavorite(movieId)
+                        }
+
+                    }.onFailure {
+                        movieRepository.updateFavorite(movieId,current.favorite)
+                    }
+
+                }
+            }
+
+
+            is MovieDetailsContract.UiEvent.WatchlistClicked -> {
+                val current = state.value.movieDetails ?: return
+                viewModelScope.launch {
+                    val newValue = !current.watchlist
+                    movieRepository.updateWatchlist(movieId,newValue)
+                    runCatching {
+                        if(newValue)
+                        {
+                            movieRepository.addToWatchlist(movieId)
+                        }else {
+                            movieRepository.removeFromWatchlist(movieId)
+                        }
+                    }.onFailure {
+                        movieRepository.updateWatchlist(movieId,current.watchlist)
+                    }
+                }
+            }
         }
     }
 
@@ -73,6 +112,7 @@ class MovieDetailsViewModel(
                     setState { copy(
                         movieDetails=movie,
                         isLoading=false,
+                        error=null
                     ) }
                 }
 

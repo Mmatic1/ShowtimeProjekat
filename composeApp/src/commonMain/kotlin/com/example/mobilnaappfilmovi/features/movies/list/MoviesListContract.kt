@@ -34,6 +34,7 @@ interface MoviesListContract {
 
         data object SortDismissed : UiEvent
 
+
         data class ChangeSort(
             val sort: SortType
         ) : UiEvent
@@ -62,5 +63,6 @@ interface MoviesListContract {
         data class ShowError(
             val message: String
         ) : SideEffect
+
     }
 }

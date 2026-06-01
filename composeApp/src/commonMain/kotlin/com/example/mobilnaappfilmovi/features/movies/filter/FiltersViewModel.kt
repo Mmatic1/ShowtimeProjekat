@@ -1,4 +1,4 @@
-package com.example.mobilnaappfilmovi.features.movies.filter
+/*package com.example.mobilnaappfilmovi.features.movies.filter
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -117,4 +117,4 @@ class FiltersViewModel(
             }
         }
     }
-}
+}*/

@@ -6,4 +6,5 @@ import de.jensklingenberg.ktorfit.http.GET
 interface UserApi {
     @GET("me")
     suspend fun me(): UserApiModel
+
 }

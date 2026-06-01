@@ -15,14 +15,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import projekat.features.movies.domain.Genre
+import com.example.mobilnaappfilmovi.features.movies.domain.Genre
+
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun GenreSection(
-    genres: List<projekat.features.movies.domain.Genre>,
+    genres: List<Genre>,
     selectedGenreId: Int?,
-    onGenreSelected: (projekat.features.movies.domain.Genre?) -> Unit
+    onGenreSelected: (Genre?) -> Unit
 )
 {
     Column {

@@ -2,6 +2,7 @@ package com.example.mobilnaappfilmovi.features.movies.list
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.mobilnaappfilmovi.core.auth.AuthStore
 import com.example.mobilnaappfilmovi.features.movies.domain.MovieRepository
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -12,7 +13,8 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 class MoviesListViewModel(
-    private val movieRepository: MovieRepository
+    private val movieRepository: MovieRepository,
+    private val authStore: AuthStore,
 ) : ViewModel() {
 
     private val _state =
@@ -105,12 +107,11 @@ class MoviesListViewModel(
                     MoviesListContract.SideEffect.NavigateToFilters
                 )
             }
+
         }
     }
 
-    /**
-     * UI posmatra ROOM
-     */
+
     private fun observeMovies() {
 
         viewModelScope.launch {

@@ -8,7 +8,6 @@ import com.example.mobilnaappfilmovi.features.movies.domain.Movie
 import com.example.mobilnaappfilmovi.features.movies.domain.MovieDetails
 import com.example.mobilnaappfilmovi.features.movies.domain.MovieRepository
 import com.example.mobilnaappfilmovi.features.movies.domain.SortType
-import com.example.mobilnaappfilmovi.features.movies.repository.toApiValue
 import com.example.mobilnaappfilmovi.networking.MoviesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -176,5 +175,29 @@ class MovieRepositoryImpl(
                     it.toGenreEntity()
                 }
             )
+    }
+
+    override suspend fun updateFavorite(movieId: String, value: Boolean) {
+        appDatabase.moviesDao().updateFavorite(movieId,value)
+    }
+
+    override suspend fun updateWatchlist(movieId: String, value: Boolean) {
+        appDatabase.moviesDao().updateWatchlist(movieId,value)
+    }
+
+    override suspend fun addFavorite(movieId: String) {
+        updateFavorite(movieId,true)
+    }
+
+    override suspend fun removeFavorite(movieId: String) {
+        updateFavorite(movieId,false)
+    }
+
+    override suspend fun addToWatchlist(movieId: String) {
+        updateWatchlist(movieId,true)
+    }
+
+    override suspend fun removeFromWatchlist(movieId: String) {
+       updateWatchlist(movieId,false)
     }
 }

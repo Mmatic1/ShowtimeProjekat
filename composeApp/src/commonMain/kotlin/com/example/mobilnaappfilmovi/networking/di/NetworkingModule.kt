@@ -4,8 +4,10 @@ import com.example.mobilnaappfilmovi.core.auth.model.AuthState
 import com.example.mobilnaappfilmovi.networking.AuthApi
 import com.example.mobilnaappfilmovi.networking.HttpClientFactory
 import com.example.mobilnaappfilmovi.networking.MoviesApi
+import com.example.mobilnaappfilmovi.networking.UserApi
 import com.example.mobilnaappfilmovi.networking.createAuthApi
 import com.example.mobilnaappfilmovi.networking.createMoviesApi
+import com.example.mobilnaappfilmovi.networking.createUserApi
 import de.jensklingenberg.ktorfit.Ktorfit
 import io.github.aakira.napier.Napier
 import io.ktor.client.HttpClient
@@ -53,6 +55,15 @@ val networkingModule = module {
             )
             .build()
             .createAuthApi()
+    }
+    single<UserApi> {
+        Ktorfit.Builder()
+            .baseUrl("https://rma.finlab.rs/")
+            .httpClient(
+                get<HttpClient>(Qualifiers.Authenticated)
+            )
+            .build()
+            .createUserApi()
     }
 }
 private fun HttpClientConfig<*>.installAuthPlugin(

@@ -12,4 +12,7 @@ interface LoginContract {
         data class PasswordChanged(val value: String,): UiEvent
         data object LoginClicked: UiEvent
     }
+    sealed interface Effect {
+        data object NavigateToMovies : Effect
+    }
 }
