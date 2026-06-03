@@ -16,6 +16,12 @@ import com.example.mobilnaappfilmovi.features.movies.details.MovieDetailsScreen
 import com.example.mobilnaappfilmovi.features.movies.details.MovieDetailsViewModel
 import com.example.mobilnaappfilmovi.features.movies.list.MoviesListScreen
 import com.example.mobilnaappfilmovi.features.movies.list.MoviesListViewModel
+import com.example.mobilnaappfilmovi.features.movies.saved.FavoriteMoviesScreen
+import com.example.mobilnaappfilmovi.features.movies.saved.FavoriteMoviesViewModel
+import com.example.mobilnaappfilmovi.features.movies.saved.WatchlistMoviesScreen
+import com.example.mobilnaappfilmovi.features.movies.saved.WatchlistMoviesViewModel
+import com.example.mobilnaappfilmovi.features.profile.ProfileScreen
+import com.example.mobilnaappfilmovi.features.profile.ProfileViewModel
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
@@ -87,11 +93,19 @@ fun ShowtimeNavigation(
                 onNavigateToFilters = {
                     navController.navigate("filters")
                 },
-
-            )
+                onNavigateToFavorites = {
+                    navController.navigate("favorites")
+                },
+                onNavigateToWatchlist = {
+                    navController.navigate("watchlist")
+                },
+                onNavigateToProfile = {
+                    navController.navigate("profile")
+                }
+                )
         }
 
-       composable(
+        composable(
             route = "movies/{$MOVIE_ID}",
             arguments = listOf(
                 navArgument(MOVIE_ID) {
@@ -110,11 +124,31 @@ fun ShowtimeNavigation(
         }
 
         composable("favorites") {
-            // FavoritesScreen
+            val viewModel = koinViewModel<FavoriteMoviesViewModel>()
+
+            FavoriteMoviesScreen(
+                viewModel = viewModel,
+                onNavigateBack = {
+                    navController.navigateUp()
+                },
+                onNavigateToDetails = {
+                    navController.navigate("movies/$it")
+                }
+            )
         }
 
         composable("watchlist") {
-            // WatchlistScreen
+            val viewModel = koinViewModel<WatchlistMoviesViewModel>()
+
+            WatchlistMoviesScreen(
+                viewModel = viewModel,
+                onNavigateBack = {
+                    navController.navigateUp()
+                },
+                onNavigateToDetails = {
+                    navController.navigate("movies/$it")
+                }
+            )
         }
 
         composable("quiz") {
@@ -122,7 +156,17 @@ fun ShowtimeNavigation(
         }
 
         composable("profile") {
-            // ProfileScreen
+
+            val viewModel = koinViewModel<ProfileViewModel>()
+
+            ProfileScreen(
+                viewModel = viewModel,
+                onLogoutSuccess = {
+                    navController.navigate("authLanding") {
+                        popUpTo(0)
+                    }
+                }
+            )
         }
         composable("filters") {
             // FiltersScreen

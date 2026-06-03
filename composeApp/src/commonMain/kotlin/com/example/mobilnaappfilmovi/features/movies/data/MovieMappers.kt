@@ -13,11 +13,11 @@ import com.example.mobilnaappfilmovi.networking.model.GenreApiModel
 import com.example.mobilnaappfilmovi.networking.model.MovieDetailsApiModel
 import com.example.mobilnaappfilmovi.networking.model.MovieListItemApiModel
 
-// API -> ENTITY
-
 fun MovieListItemApiModel.toMovieEntity(
     imageBaseUrl: String,
     posterSize: String,
+    favorite: Boolean = false,
+    watchlist: Boolean = false,
 ): MovieEntity =
     MovieEntity(
         imdbId = imdbId,
@@ -28,11 +28,15 @@ fun MovieListItemApiModel.toMovieEntity(
         posterUrl = posterPath?.let {
             "$imageBaseUrl$posterSize$it"
         },
+        favorite = favorite,
+        watchlist = watchlist,
     )
 
 fun MovieDetailsApiModel.toMovieEntity(
     imageBaseUrl: String,
     posterSize: String,
+    favorite: Boolean = false,
+    watchlist: Boolean = false,
 ): MovieEntity =
     MovieEntity(
         imdbId = imdbId,
@@ -43,6 +47,8 @@ fun MovieDetailsApiModel.toMovieEntity(
         posterUrl = posterPath?.let {
             "$imageBaseUrl$posterSize$it"
         },
+        favorite = favorite,
+        watchlist = watchlist,
     )
 
 fun MovieDetailsApiModel.toMovieDetailsEntity(
@@ -75,7 +81,6 @@ fun GenreApiModel.toGenreEntity(): GenreEntity =
         name = name,
     )
 
-// ENTITY -> DOMAIN
 
 fun GenreEntity.toDomain(): Genre =
     Genre(

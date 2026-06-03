@@ -21,7 +21,7 @@ import kotlinx.coroutines.Dispatchers
         GenreEntity::class,
         MovieGenreCrossRef::class,
         MovieDetailsEntity::class,
-        UserEntity::class
+        UserEntity::class,
     ],
     version = 1,
     exportSchema = true

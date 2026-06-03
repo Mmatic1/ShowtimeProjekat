@@ -1,31 +1,24 @@
 package com.example.mobilnaappfilmovi.networking.di
 import com.example.mobilnaappfilmovi.core.auth.AuthStore
 import com.example.mobilnaappfilmovi.core.auth.model.AuthState
-import com.example.mobilnaappfilmovi.networking.AuthApi
+import com.example.mobilnaappfilmovi.networking.api.AuthApi
 import com.example.mobilnaappfilmovi.networking.HttpClientFactory
-import com.example.mobilnaappfilmovi.networking.MoviesApi
-import com.example.mobilnaappfilmovi.networking.UserApi
-import com.example.mobilnaappfilmovi.networking.createAuthApi
-import com.example.mobilnaappfilmovi.networking.createMoviesApi
-import com.example.mobilnaappfilmovi.networking.createUserApi
+import com.example.mobilnaappfilmovi.networking.api.MoviesApi
+import com.example.mobilnaappfilmovi.networking.api.UserApi
+import com.example.mobilnaappfilmovi.networking.api.createAuthApi
+import com.example.mobilnaappfilmovi.networking.api.createMoviesApi
+import com.example.mobilnaappfilmovi.networking.api.createUserApi
+
 import de.jensklingenberg.ktorfit.Ktorfit
-import io.github.aakira.napier.Napier
 import io.ktor.client.HttpClient
 import io.ktor.client.HttpClientConfig
 import io.ktor.client.plugins.api.Send
 import io.ktor.client.plugins.api.SetupRequest
 import io.ktor.client.plugins.api.createClientPlugin
-import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
-import io.ktor.client.plugins.logging.LogLevel
-import io.ktor.client.plugins.logging.Logger
-import io.ktor.client.plugins.logging.Logging
 import io.ktor.client.request.header
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpStatusCode
-import org.koin.core.component.inject
-import io.ktor.serialization.kotlinx.json.json
 import kotlinx.coroutines.runBlocking
-import kotlinx.serialization.json.Json
 import org.koin.dsl.module
 
 
@@ -42,7 +35,7 @@ val networkingModule = module {
     }
     single<MoviesApi> {
         Ktorfit.Builder()
-            .httpClient(get<HttpClient>(Qualifiers.Unauthenticated))
+            .httpClient(get<HttpClient>(Qualifiers.Authenticated))
             .baseUrl("https://rma.finlab.rs/")
             .build()
             .createMoviesApi()

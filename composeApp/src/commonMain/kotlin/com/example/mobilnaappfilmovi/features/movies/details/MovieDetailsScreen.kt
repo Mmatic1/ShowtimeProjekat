@@ -21,8 +21,10 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.PlayArrow
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -48,6 +50,7 @@ import coil3.compose.AsyncImage
 import com.example.mobilnaappfilmovi.features.movies.details.components.InfoCard
 import com.example.mobilnaappfilmovi.features.movies.details.components.SectionTitle
 import com.example.mobilnaappfilmovi.features.movies.domain.MovieDetails
+import kotlinx.coroutines.delay
 import kotlin.math.roundToInt
 
 @Composable
@@ -64,6 +67,13 @@ fun MovieDetailsScreen(
                     onNavigateBack()
                 }
             }
+        }
+    }
+    LaunchedEffect(state.syncMessage){
+        if (state.syncMessage!=null)
+        {
+            delay(3000)
+            viewModel.onEvent(MovieDetailsContract.UiEvent.SyncMessageShown)
         }
     }
 
@@ -104,6 +114,13 @@ fun MovieDetailsScreen(
         state.movieDetails != null -> {
             MovieDetailsContent(
                 movie = state.movieDetails!!,
+                syncMessage=state.syncMessage,
+                onFavoriteClick={
+                    viewModel.onEvent(MovieDetailsContract.UiEvent.FavoriteClicked)
+                },
+                onWatchlistClick={
+                    viewModel.onEvent(MovieDetailsContract.UiEvent.WatchlistClicked)
+                },
                 onNavigateBack = onNavigateBack
             )
         }
@@ -114,6 +131,9 @@ fun MovieDetailsScreen(
 @Composable
 fun MovieDetailsContent(
     movie: MovieDetails,
+    syncMessage: String?,
+    onFavoriteClick: () -> Unit,
+    onWatchlistClick: () -> Unit,
     onNavigateBack: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -253,6 +273,49 @@ fun MovieDetailsContent(
         }
 
         Spacer(Modifier.height(8.dp))
+
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp)
+                .offset(y = (-24).dp),
+            horizontalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            Button(
+                onClick = onFavoriteClick,
+                modifier = Modifier.weight(1f)
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Star,
+                    contentDescription = null
+                )
+                Spacer(Modifier.width(8.dp))
+                Text(if (movie.favorite) "Favorite" else "Add Favorite")
+            }
+
+            Button(
+                onClick = onWatchlistClick,
+                modifier = Modifier.weight(1f)
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Add,
+                    contentDescription = null
+                )
+                Spacer(Modifier.width(8.dp))
+                Text(if (movie.watchlist) "Watchlist" else "Add Watchlist")
+            }
+        }
+
+        if (syncMessage != null) {
+            Text(
+                text = syncMessage,
+                color = Color(0xFFFFA0A0),
+                modifier = Modifier
+                    .padding(horizontal = 16.dp)
+                    .offset(y = (-16).dp),
+                style = MaterialTheme.typography.bodySmall
+            )
+        }
 
         Row(
             modifier = Modifier

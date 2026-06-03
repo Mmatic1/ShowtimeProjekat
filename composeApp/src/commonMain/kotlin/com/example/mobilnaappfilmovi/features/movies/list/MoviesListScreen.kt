@@ -40,8 +40,10 @@ fun MoviesListScreen(
     viewModel: MoviesListViewModel,
     onNavigateToDetails: (String) -> Unit,
     onNavigateToFilters: () -> Unit,
-
-) {
+    onNavigateToFavorites: () -> Unit,
+    onNavigateToWatchlist: () -> Unit,
+    onNavigateToProfile: () -> Unit,
+    ) {
 
     val state by viewModel.state.collectAsStateWithLifecycle()
 
@@ -85,6 +87,14 @@ fun MoviesListScreen(
                     onNavigateToFilters()
                 }
 
+                is MoviesListContract.SideEffect.NavigateToFavorites -> {
+                    onNavigateToFavorites()
+                }
+
+                is MoviesListContract.SideEffect.NavigateToWatchlist -> {
+                    onNavigateToWatchlist()
+                }
+
                 is MoviesListContract.SideEffect.ShowError -> Unit
 
 
@@ -104,6 +114,15 @@ fun MoviesListScreen(
                 viewModel.onEvent(
                     MoviesListContract.UiEvent.FilterClicked
                 )
+            },
+            onFavoritesClick = {
+                viewModel.onEvent(MoviesListContract.UiEvent.FavoritesClicked)
+            },
+            onWatchlistClick = {
+                viewModel.onEvent(MoviesListContract.UiEvent.WatchlistClicked)
+            },
+            onProfileClick = {
+                onNavigateToProfile()
             }
         )
 
@@ -122,7 +141,7 @@ fun MoviesListScreen(
 
 
 
-               Button(
+                Button(
                     onClick = {
                         viewModel.onEvent(
                             MoviesListContract.UiEvent.SortClicked

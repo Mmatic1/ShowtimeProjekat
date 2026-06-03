@@ -8,7 +8,7 @@ import com.example.mobilnaappfilmovi.features.movies.domain.Movie
 import com.example.mobilnaappfilmovi.features.movies.domain.MovieDetails
 import com.example.mobilnaappfilmovi.features.movies.domain.MovieRepository
 import com.example.mobilnaappfilmovi.features.movies.domain.SortType
-import com.example.mobilnaappfilmovi.networking.MoviesApi
+import com.example.mobilnaappfilmovi.networking.api.MoviesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
@@ -68,6 +68,24 @@ class MovieRepositoryImpl(
         appDatabase
             .moviesDao()
             .observeGenres()
+            .map { rows ->
+                rows.map { it.toDomain() }
+            }
+
+    override fun observeFavorites(): Flow<List<Movie>> =
+        appDatabase
+            .moviesDao()
+            .observeFavorites()
+            .distinctUntilChanged()
+            .map { rows ->
+                rows.map { it.toDomain() }
+            }
+
+    override fun observeWatchlist(): Flow<List<Movie>> =
+        appDatabase
+            .moviesDao()
+            .observeWatchlist()
+            .distinctUntilChanged()
             .map { rows ->
                 rows.map { it.toDomain() }
             }
@@ -177,6 +195,68 @@ class MovieRepositoryImpl(
             )
     }
 
+    override suspend fun refreshFavorites() {
+        ensureConfigLoaded()
+
+        val response = moviesApi.getFavorites()
+        val movieEntities = response.map {
+            it.toMovieEntity(
+                imageBaseUrl = imageBaseUrl,
+                posterSize = posterSize,
+                favorite = true,
+            )
+        }
+        val genreEntities = response
+            .flatMap { it.genres }
+            .distinctBy { it.id }
+            .map { it.toGenreEntity() }
+        val crossRefs = response.flatMap { movie ->
+            movie.genres.map { genre ->
+                MovieGenreCrossRef(
+                    movieId = movie.imdbId,
+                    genreId = genre.id,
+                )
+            }
+        }
+
+        appDatabase.moviesDao().replaceFavoritesTransaction(
+            movies = movieEntities,
+            genres = genreEntities,
+            crossRefs = crossRefs,
+        )
+    }
+
+    override suspend fun refreshWatchlist() {
+        ensureConfigLoaded()
+
+        val response = moviesApi.getWatchlist()
+        val movieEntities = response.map {
+            it.toMovieEntity(
+                imageBaseUrl = imageBaseUrl,
+                posterSize = posterSize,
+                watchlist = true,
+            )
+        }
+        val genreEntities = response
+            .flatMap { it.genres }
+            .distinctBy { it.id }
+            .map { it.toGenreEntity() }
+        val crossRefs = response.flatMap { movie ->
+            movie.genres.map { genre ->
+                MovieGenreCrossRef(
+                    movieId = movie.imdbId,
+                    genreId = genre.id,
+                )
+            }
+        }
+
+        appDatabase.moviesDao().replaceWatchlistTransaction(
+            movies = movieEntities,
+            genres = genreEntities,
+            crossRefs = crossRefs,
+        )
+    }
+
     override suspend fun updateFavorite(movieId: String, value: Boolean) {
         appDatabase.moviesDao().updateFavorite(movieId,value)
     }
@@ -186,18 +266,18 @@ class MovieRepositoryImpl(
     }
 
     override suspend fun addFavorite(movieId: String) {
-        updateFavorite(movieId,true)
+        moviesApi.addFavorite(movieId)
     }
 
     override suspend fun removeFavorite(movieId: String) {
-        updateFavorite(movieId,false)
+        moviesApi.removeFavorite(movieId)
     }
 
     override suspend fun addToWatchlist(movieId: String) {
-        updateWatchlist(movieId,true)
+        moviesApi.addToWatchlist(movieId)
     }
 
     override suspend fun removeFromWatchlist(movieId: String) {
-       updateWatchlist(movieId,false)
+        moviesApi.removeFromWatchlist(movieId)
     }
 }

@@ -3,8 +3,10 @@ package com.example.mobilnaappfilmovi.features.movies.list.components
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Badge
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -19,37 +21,46 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun MoviesTopBar(
     filtersCount: Int,
-    onFilterClick: () -> Unit
+    onFilterClick: () -> Unit,
+    onFavoritesClick: () -> Unit,
+    onWatchlistClick: () -> Unit,
+    onProfileClick: () -> Unit, // 🔥 DODATO
 ) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(16.dp),
+            .padding(12.dp),
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
 
-        Text(
-            text = "🎬 Premiere",
-            style = MaterialTheme.typography.headlineSmall,
-            color = Color.White
-        )
+        // LEFT SIDE (filter + favorites + watchlist)
+        Row {
 
-        Box {
-            Button(onClick = onFilterClick,
-                colors = ButtonDefaults.buttonColors(
-                    containerColor =Color(0xFFE50914).copy(alpha = 0.2f),
-                    contentColor = Color.White
-                )) {
-                Text("Filter")
+            Button(onClick = onFilterClick) {
+                Text("Filters ($filtersCount)")
             }
 
-            if (filtersCount > 0) {
-                Badge(
-                    modifier = Modifier.align(Alignment.TopEnd)
-                ) {
-                    Text("$filtersCount")
-                }
+            Spacer(modifier = Modifier.width(8.dp))
+
+            Button(onClick = onFavoritesClick) {
+                Text("Favorites")
             }
+
+            Spacer(modifier = Modifier.width(8.dp))
+
+            Button(onClick = onWatchlistClick) {
+                Text("Watchlist")
+            }
+        }
+
+        // RIGHT SIDE 🔥 PROFILE
+        Button(
+            onClick = onProfileClick,
+            colors = ButtonDefaults.buttonColors(
+                containerColor = Color(0xFFE50914)
+            )
+        ) {
+            Text("Profile")
         }
     }
 }

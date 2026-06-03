@@ -73,6 +73,9 @@ class MovieDetailsViewModel(
 
                     }.onFailure {
                         movieRepository.updateFavorite(movieId,current.favorite)
+                        setState {
+                            copy(syncMessage = "Favorite sync failed. Change was reverted.")
+                        }
                     }
 
                 }
@@ -93,8 +96,14 @@ class MovieDetailsViewModel(
                         }
                     }.onFailure {
                         movieRepository.updateWatchlist(movieId,current.watchlist)
+                        setState {
+                            copy(syncMessage = "Watchlist sync failed. Change was reverted.")
+                        }
                     }
                 }
+            }
+            is MovieDetailsContract.UiEvent.SyncMessageShown -> {
+                setState { copy(syncMessage = null) }
             }
         }
     }

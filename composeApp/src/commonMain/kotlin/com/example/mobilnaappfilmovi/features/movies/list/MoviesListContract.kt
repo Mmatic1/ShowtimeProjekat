@@ -42,6 +42,10 @@ interface MoviesListContract {
 
         data object FilterClicked : UiEvent
 
+        data object FavoritesClicked : UiEvent
+
+        data object WatchlistClicked : UiEvent
+
         data class ApplyFilters(
             val filters: Filters
         ) : UiEvent
@@ -59,6 +63,10 @@ interface MoviesListContract {
         ) : SideEffect
 
         data object NavigateToFilters : SideEffect
+
+        data object NavigateToFavorites : SideEffect
+
+        data object NavigateToWatchlist : SideEffect
 
         data class ShowError(
             val message: String

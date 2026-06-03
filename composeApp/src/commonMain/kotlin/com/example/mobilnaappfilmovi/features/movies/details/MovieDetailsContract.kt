@@ -9,6 +9,7 @@ interface MovieDetailsContract{
         val movieDetails: MovieDetails?=null,
         val isLoading: Boolean=false,
         val error: String?=null,
+        val syncMessage: String? = null,
     )
 
     sealed class UiEvent{
@@ -18,6 +19,8 @@ interface MovieDetailsContract{
         data object FavoriteClicked : UiEvent()
 
         data object WatchlistClicked : UiEvent()
+        data object SyncMessageShown : UiEvent()
+
     }
 
     sealed class SideEffect{

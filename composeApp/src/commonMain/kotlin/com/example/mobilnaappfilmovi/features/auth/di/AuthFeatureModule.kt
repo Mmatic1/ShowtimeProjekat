@@ -14,6 +14,7 @@ val authFeatureModule = module {
             authApi = get(),
             userApi = get(),
             authStore = get(),
+            database = get(),
         )
     }
 

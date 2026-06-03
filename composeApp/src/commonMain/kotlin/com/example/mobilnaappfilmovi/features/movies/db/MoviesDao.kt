@@ -62,28 +62,35 @@ interface MoviesDao {
         details: MovieDetailsEntity,
     )
 
+    @Query("SELECT favorite FROM movies WHERE imdbId = :movieId")
+    suspend fun isFavorite(movieId: String): Boolean?
 
+    @Query("SELECT watchlist FROM movies WHERE imdbId = :movieId")
+    suspend fun isWatchlist(movieId: String): Boolean?
 
-    @Query("""
-        UPDATE movies
-        SET favorite = :isFavorite
-        WHERE imdbId = :movieId
-    """)
-    suspend fun updateFavorite(
-        movieId: String,
-        isFavorite: Boolean,
-    )
+    @Query("UPDATE movies SET favorite = :value WHERE imdbId = :movieId")
+    suspend fun updateFavorite(movieId: String, value: Boolean)
 
-    @Query("""
-        UPDATE movies
-        SET watchlist = :inWatchlist
-        WHERE imdbId = :movieId
-    """)
-    suspend fun updateWatchlist(
-        movieId: String,
-        inWatchlist: Boolean,
-    )
+    @Query("UPDATE movies SET watchlist = :value WHERE imdbId = :movieId")
+    suspend fun updateWatchlist(movieId: String, value: Boolean)
 
+    @Query("SELECT imdbId FROM movies WHERE favorite = 1")
+    suspend fun getFavoriteIds(): List<String>
+
+    @Query("SELECT imdbId FROM movies WHERE watchlist = 1")
+    suspend fun getWatchlistIds(): List<String>
+
+    @Query("UPDATE movies SET favorite = 0")
+    suspend fun clearFavoriteFlags()
+
+    @Query("UPDATE movies SET watchlist = 0")
+    suspend fun clearWatchlistFlags()
+
+    @Query("UPDATE movies SET favorite = 1 WHERE imdbId IN (:movieIds)")
+    suspend fun markFavorites(movieIds: List<String>)
+
+    @Query("UPDATE movies SET watchlist = 1 WHERE imdbId IN (:movieIds)")
+    suspend fun markWatchlist(movieIds: List<String>)
 
 
     @Query("DELETE FROM movies")
@@ -100,10 +107,19 @@ interface MoviesDao {
         genres: List<GenreEntity>,
         crossRefs: List<MovieGenreCrossRef>,
     ) {
+        val favoriteIds = getFavoriteIds().toSet()
+        val watchlistIds = getWatchlistIds().toSet()
+        val moviesWithUserFlags = movies.map { movie ->
+            movie.copy(
+                favorite = movie.imdbId in favoriteIds,
+                watchlist = movie.imdbId in watchlistIds,
+            )
+        }
+
         clearMovies()
         clearMovieGenreCrossRefs()
 
-        insertMovies(movies)
+        insertMovies(moviesWithUserFlags)
         insertGenres(genres)
         insertMovieGenreCrossRefs(crossRefs)
     }
@@ -115,9 +131,51 @@ interface MoviesDao {
         genres: List<GenreEntity>,
         crossRefs: List<MovieGenreCrossRef>,
     ) {
-        insertMovies(listOf(movie))
+        val favorite = isFavorite(movie.imdbId) ?: movie.favorite
+        val watchlist = isWatchlist(movie.imdbId) ?: movie.watchlist
+        insertMovies(listOf(movie.copy(favorite = favorite, watchlist = watchlist)))
         insertMovieDetails(details)
         insertGenres(genres)
         insertMovieGenreCrossRefs(crossRefs)
+    }
+
+    @Transaction
+    suspend fun replaceFavoritesTransaction(
+        movies: List<MovieEntity>,
+        genres: List<GenreEntity>,
+        crossRefs: List<MovieGenreCrossRef>,
+    ) {
+        val watchlistIds = getWatchlistIds().toSet()
+        insertMovies(
+            movies.map { movie ->
+                movie.copy(watchlist = movie.imdbId in watchlistIds)
+            }
+        )
+        insertGenres(genres)
+        insertMovieGenreCrossRefs(crossRefs)
+        clearFavoriteFlags()
+        if (movies.isNotEmpty()) {
+            markFavorites(movies.map { it.imdbId })
+        }
+    }
+
+    @Transaction
+    suspend fun replaceWatchlistTransaction(
+        movies: List<MovieEntity>,
+        genres: List<GenreEntity>,
+        crossRefs: List<MovieGenreCrossRef>,
+    ) {
+        val favoriteIds = getFavoriteIds().toSet()
+        insertMovies(
+            movies.map { movie ->
+                movie.copy(favorite = movie.imdbId in favoriteIds)
+            }
+        )
+        insertGenres(genres)
+        insertMovieGenreCrossRefs(crossRefs)
+        clearWatchlistFlags()
+        if (movies.isNotEmpty()) {
+            markWatchlist(movies.map { it.imdbId })
+        }
     }
 }

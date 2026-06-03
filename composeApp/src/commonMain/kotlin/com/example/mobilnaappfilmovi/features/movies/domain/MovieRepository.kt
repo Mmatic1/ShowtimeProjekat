@@ -4,11 +4,16 @@ import kotlinx.coroutines.flow.Flow
 
 interface MovieRepository{
 
+
     fun observeMovies(): Flow<List<Movie>>
 
     fun observeMovie(id: String): Flow<MovieDetails?>
 
     fun observeGenres(): Flow<List<Genre>>
+
+    fun observeFavorites(): Flow<List<Movie>>
+
+    fun observeWatchlist(): Flow<List<Movie>>
 
     suspend fun refreshMovies(
         sort: SortType,
@@ -18,6 +23,10 @@ interface MovieRepository{
     suspend fun refreshMovie(id: String)
 
     suspend fun refreshGenres()
+
+    suspend fun refreshFavorites()
+
+    suspend fun refreshWatchlist()
 
     suspend fun updateFavorite(movieId: String, value: Boolean)
     suspend fun updateWatchlist(movieId: String, value: Boolean)

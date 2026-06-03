@@ -13,5 +13,6 @@ data class MovieEntity(
     val imdbRating: Float?,
     val imdbVotes: Int?,
     val posterUrl: String?,
-
+    val favorite: Boolean = false,
+    val watchlist: Boolean = false,
 )

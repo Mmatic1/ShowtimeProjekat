@@ -1,4 +1,4 @@
-package com.example.mobilnaappfilmovi.networking
+package com.example.mobilnaappfilmovi.networking.api
 
 import com.example.mobilnaappfilmovi.networking.model.ActorApiModel
 import com.example.mobilnaappfilmovi.networking.model.ConfigApiModel
@@ -8,7 +8,9 @@ import com.example.mobilnaappfilmovi.networking.model.MovieImagesApiModel
 import com.example.mobilnaappfilmovi.networking.model.MovieListItemApiModel
 import com.example.mobilnaappfilmovi.networking.model.PaginatedResponse
 import com.example.mobilnaappfilmovi.networking.model.VideoApiModel
+import de.jensklingenberg.ktorfit.http.DELETE
 import de.jensklingenberg.ktorfit.http.GET
+import de.jensklingenberg.ktorfit.http.POST
 import de.jensklingenberg.ktorfit.http.Query
 import de.jensklingenberg.ktorfit.http.Path
 
@@ -49,5 +51,22 @@ interface MoviesApi {
     @GET("genres")
     suspend fun getGenres(): List<GenreApiModel>
 
+    @GET("me/favorites")
+    suspend fun getFavorites(): List<MovieListItemApiModel>
+
+    @POST("me/favorites/{movie_id}")
+    suspend fun addFavorite(@Path("movie_id") movieId: String)
+
+    @DELETE("me/favorites/{movie_id}")
+    suspend fun removeFavorite(@Path("movie_id") movieId: String)
+
+    @GET("me/watchlist")
+    suspend fun getWatchlist(): List<MovieListItemApiModel>
+
+    @POST("me/watchlist/{movie_id}")
+    suspend fun addToWatchlist(@Path("movie_id") movieId: String)
+
+    @DELETE("me/watchlist/{movie_id}")
+    suspend fun removeFromWatchlist(@Path("movie_id") movieId: String)
 
 }

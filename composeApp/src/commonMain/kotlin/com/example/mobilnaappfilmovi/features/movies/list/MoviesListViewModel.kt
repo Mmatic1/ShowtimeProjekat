@@ -14,7 +14,6 @@ import kotlinx.coroutines.launch
 
 class MoviesListViewModel(
     private val movieRepository: MovieRepository,
-    private val authStore: AuthStore,
 ) : ViewModel() {
 
     private val _state =
@@ -106,6 +105,14 @@ class MoviesListViewModel(
                 setEffect(
                     MoviesListContract.SideEffect.NavigateToFilters
                 )
+            }
+
+            is MoviesListContract.UiEvent.FavoritesClicked -> {
+                setEffect(MoviesListContract.SideEffect.NavigateToFavorites)
+            }
+
+            is MoviesListContract.UiEvent.WatchlistClicked -> {
+                setEffect(MoviesListContract.SideEffect.NavigateToWatchlist)
             }
 
         }
